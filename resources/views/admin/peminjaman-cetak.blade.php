@@ -124,13 +124,9 @@
                     </td>
                     <td>
                         @php
-                            $displayDenda = $d->denda;
-                            if (($d->status == 'disetujui' || $d->status == 'menunggu_kembali') && now()->startOfDay()->gt(\Carbon\Carbon::parse($d->jatuh_tempo)->startOfDay())) {
-                                $lateDays = now()->startOfDay()->diffInDays(\Carbon\Carbon::parse($d->jatuh_tempo)->startOfDay());
-                                $displayDenda = $lateDays * 2000;
-                            }
+                            $currentDenda = $d->calculateDenda();
                         @endphp
-                        {{ $displayDenda > 0 ? 'Rp ' . number_format($displayDenda, 0, ',', '.') : '-' }}
+                        {{ $currentDenda > 0 ? 'Rp ' . number_format($currentDenda, 0, ',', '.') : '-' }}
                     </td>
                 </tr>
             @empty

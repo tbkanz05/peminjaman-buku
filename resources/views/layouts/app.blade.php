@@ -168,24 +168,45 @@
 
             .book-grid {
                 display: grid !important;
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 20px !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 10px !important;
             }
 
             @media (min-width: 640px) {
-                .book-grid { grid-template-columns: repeat(2, 1fr) !important; }
+                .book-grid { 
+                    grid-template-columns: repeat(3, 1fr) !important;
+                    gap: 20px !important;
+                }
             }
 
             @media (min-width: 768px) {
-                .book-grid { grid-template-columns: repeat(3, 1fr) !important; }
+                .book-grid { grid-template-columns: repeat(4, 1fr) !important; }
             }
 
             @media (min-width: 1024px) {
                 .book-grid { grid-template-columns: repeat(5, 1fr) !important; }
             }
 
-            @media (min-width: 1280px) {
-                .book-grid { grid-template-columns: repeat(5, 1fr) !important; }
+            @media (max-width: 640px) {
+                .book-info-box {
+                    padding: 8px !important;
+                }
+                .book-info-box h3 {
+                    font-size: 10px !important;
+                    line-height: 1.2 !important;
+                }
+                .book-info-box span, .book-info-box p {
+                    font-size: 8px !important;
+                }
+                .book-info-box .flex-shrink-0 {
+                    display: none; /* Hide STOK text on very small screens to save space */
+                }
+                .book-info-box .btn-glow-indigo, 
+                .book-info-box .btn-glow-blue, 
+                .book-info-box .btn-glow-red {
+                    padding: 4px 2px !important;
+                    font-size: 7px !important;
+                }
             }
 
             .book-card-custom {
@@ -251,6 +272,28 @@
             .btn-glow-purple:hover {
                 box-shadow: 0 0 25px rgba(168, 85, 247, 0.7) !important;
                 transform: translateY(-2px) !important;
+            }
+
+            /* Responsive Adjustments */
+            @media (max-width: 640px) {
+                table.dataTable thead th, table.dataTable tbody td {
+                    padding: 10px 8px !important;
+                    font-size: 0.7rem !important;
+                }
+                h3.text-3xl {
+                    font-size: 1.5rem !important;
+                    line-height: 2rem !important;
+                }
+                .max-w-7xl {
+                    padding-left: 1rem !important;
+                    padding-right: 1rem !important;
+                }
+                .p-8 {
+                    padding: 1.5rem !important;
+                }
+                .p-12 {
+                    padding: 2rem !important;
+                }
             }
         </style>
     </head>

@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-12 animate-fade-in">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             @if(session('success'))
                 <div class="mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-r-lg shadow-sm" role="alert">
@@ -65,21 +65,15 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @php
-                                            $displayDenda = $d->denda;
-                                            $isLate = false;
-                                            if ($d->status == 'disetujui' && now()->startOfDay()->gt(\Carbon\Carbon::parse($d->jatuh_tempo)->startOfDay())) {
-                                                $lateDays = now()->startOfDay()->diffInDays(\Carbon\Carbon::parse($d->jatuh_tempo)->startOfDay());
-                                                $displayDenda = $lateDays * 2000;
-                                                $isLate = true;
-                                            }
-                                        @endphp
-                                        <div class="text-sm {{ $displayDenda > 0 ? 'text-red-600 font-bold' : 'text-gray-500' }}">
-                                            {{ $displayDenda > 0 ? 'Rp ' . number_format($displayDenda, 0, ',', '.') : '-' }}
-                                            @if($isLate)
-                                                <span class="block text-[9px] uppercase tracking-tighter">Berjalan</span>
-                                            @endif
-                                        </div>
+                                         @php
+                                             $currentDenda = $d->calculateDenda();
+                                         @endphp
+                                         <div class="text-sm {{ $currentDenda > 0 ? 'text-red-600 font-bold' : 'text-gray-500' }}">
+                                             {{ $currentDenda > 0 ? 'Rp ' . number_format($currentDenda, 0, ',', '.') : '-' }}
+                                             @if($currentDenda > 0 && $d->status == 'disetujui')
+                                                 <span class="block text-[9px] uppercase tracking-tighter">Berjalan</span>
+                                             @endif
+                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         @if($d->status == 'disetujui')

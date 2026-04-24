@@ -86,6 +86,27 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            @if(Auth::user()->role == 'admin')
+                <x-responsive-nav-link :href="route('buku.index')" :active="request()->routeIs('buku.*')">
+                    {{ __('Data Buku') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.peminjaman.index')" :active="request()->routeIs('admin.peminjaman.*')">
+                    {{ __('Persetujuan') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.siswa.index')" :active="request()->routeIs('admin.siswa.*')">
+                    {{ __('Kelola Siswa') }}
+                </x-responsive-nav-link>
+            @endif
+
+            @if(Auth::user()->role == 'siswa')
+                <x-responsive-nav-link :href="route('pinjam.index')" :active="request()->routeIs('pinjam.*')">
+                    {{ __('Pinjam Buku') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('riwayat')" :active="request()->routeIs('riwayat')">
+                    {{ __('Riwayat Saya') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

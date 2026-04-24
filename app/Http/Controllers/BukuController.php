@@ -18,6 +18,7 @@ class BukuController extends Controller
     {
         $request->validate([
             'judul' => 'required',
+            'kategori' => 'required',
             'pengarang' => 'required',
             'stok' => 'required|numeric',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
@@ -39,6 +40,7 @@ class BukuController extends Controller
         
         $request->validate([
             'judul' => 'required',
+            'kategori' => 'required',
             'pengarang' => 'required',
             'stok' => 'required|numeric',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
@@ -54,7 +56,7 @@ class BukuController extends Controller
         }
 
         $buku->update($data);
-        return back()->with('success', 'Buku berhasil diperbarui');
+        return redirect()->route('buku.index')->with('success', 'Buku berhasil diperbarui');
     }
 
     public function edit(string $id)

@@ -15,7 +15,34 @@ Route::get('/dashboard', function () {
     $total_siswa = \App\Models\User::where('role', 'siswa')->count();
     $total_peminjaman = \App\Models\Peminjaman::count();
 
-    return view('dashboard', compact('total_buku', 'total_siswa', 'total_peminjaman'));
+    // Data untuk Grafik (Admin Only)
+    $chartData = [
+        'labels' => [],
+        'data' => [],
+        'status_labels' => ['Menunggu', 'Disetujui', 'Ditolak', 'Kembali'],
+        'status_data' => []
+    ];
+
+    if (auth()->user()->role == 'admin') {
+        // 1. Tren Peminjaman 6 Bulan Terakhir
+        for ($i = 5; $i >= 0; $i--) {
+            $month = now()->subMonths($i);
+            $chartData['labels'][] = $month->format('M Y');
+            $chartData['data'][] = \App\Models\Peminjaman::whereYear('tanggal_pinjam', $month->year)
+                ->whereMonth('tanggal_pinjam', $month->month)
+                ->count();
+        }
+
+        // 2. Distribusi Status
+        $chartData['status_data'] = [
+            \App\Models\Peminjaman::where('status', 'menunggu')->count(),
+            \App\Models\Peminjaman::where('status', 'disetujui')->count(),
+            \App\Models\Peminjaman::where('status', 'ditolak')->count(),
+            \App\Models\Peminjaman::whereIn('status', ['kembali', 'menunggu_kembali'])->count(),
+        ];
+    }
+
+    return view('dashboard', compact('total_buku', 'total_siswa', 'total_peminjaman', 'chartData'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

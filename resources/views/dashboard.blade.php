@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-12 animate-fade-in">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="mb-8 text-gray-900 dark:text-gray-100">
                 <h3 class="text-3xl font-black mb-2 tracking-tight">Selamat Datang, {{ Auth::user()->name }}! 👋</h3>
@@ -96,6 +96,124 @@
                 </a>
 
             </div>
+
+            @if(Auth::user()->role == 'admin')
+                <!-- Section: Grafik -->
+                <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Grafik Tren Peminjaman -->
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h4 class="text-lg font-bold text-gray-900 dark:text-white">Tren Peminjaman</h4>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Statistik 6 bulan terakhir</p>
+                            </div>
+                            <div class="w-10 h-10 bg-blue-50 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+                            </div>
+                        </div>
+                        <div class="relative h-64">
+                            <canvas id="borrowingChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Grafik Status Peminjaman -->
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h4 class="text-lg font-bold text-gray-900 dark:text-white">Status Peminjaman</h4>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Distribusi status saat ini</p>
+                            </div>
+                            <div class="w-10 h-10 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                            </div>
+                        </div>
+                        <div class="relative h-64">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart.js scripts -->
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const ctxBorrow = document.getElementById('borrowingChart').getContext('2d');
+                        const ctxStatus = document.getElementById('statusChart').getContext('2d');
+
+                        // Common Chart Options
+                        const options = {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        display: true,
+                                        color: 'rgba(156, 163, 175, 0.1)'
+                                    },
+                                    ticks: {
+                                        stepSize: 1
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false
+                                    }
+                                }
+                            }
+                        };
+
+                        // 1. Tren Peminjaman Chart
+                        new Chart(ctxBorrow, {
+                            type: 'line',
+                            data: {
+                                labels: @json($chartData['labels']),
+                                datasets: [{
+                                    label: 'Jumlah Peminjaman',
+                                    data: @json($chartData['data']),
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                    borderWidth: 3,
+                                    fill: true,
+                                    tension: 0.4,
+                                    pointBackgroundColor: '#3b82f6',
+                                    pointBorderColor: '#fff',
+                                    pointBorderWidth: 2,
+                                    pointRadius: 4,
+                                    pointHoverRadius: 6
+                                }]
+                            },
+                            options: options
+                        });
+
+                        // 2. Status Peminjaman Chart
+                        new Chart(ctxStatus, {
+                            type: 'bar',
+                            data: {
+                                labels: @json($chartData['status_labels']),
+                                datasets: [{
+                                    label: 'Total',
+                                    data: @json($chartData['status_data']),
+                                    backgroundColor: [
+                                        'rgba(245, 158, 11, 0.8)', // Menunggu
+                                        'rgba(16, 185, 129, 0.8)',  // Disetujui
+                                        'rgba(239, 68, 68, 0.8)',   // Ditolak
+                                        'rgba(99, 102, 241, 0.8)'   // Kembali
+                                    ],
+                                    borderRadius: 10,
+                                    barThickness: 40
+                                }]
+                            },
+                            options: options
+                        });
+                    });
+                </script>
+            @endif
 
             </div>
         </div>

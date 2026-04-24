@@ -125,13 +125,7 @@ class PeminjamanController extends Controller
         }
 
         // hitung denda final
-        $jatuh_tempo = \Carbon\Carbon::parse($p->jatuh_tempo)->startOfDay();
-        $hari_kembali = now()->startOfDay(); // Denda dihitung sampai hari disetujui kembali
-        
-        if ($hari_kembali->gt($jatuh_tempo)) {
-            $selisih = $hari_kembali->diffInDays($jatuh_tempo);
-            $p->denda = $selisih * 2000;
-        }
+        $p->denda = $p->calculateDenda();
 
         // ubah status menjadi kembali
         $p->status = 'kembali';

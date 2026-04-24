@@ -19,9 +19,22 @@
                         </div>
                     @endif
 
-                    <div>
-                        <label>Judul Buku</label>
-                        <input type="text" name="judul" value="{{ $buku->judul }}" required>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label>Judul Buku</label>
+                            <input type="text" name="judul" value="{{ $buku->judul }}" required>
+                        </div>
+                        <div>
+                            <label>Kategori</label>
+                            <select name="kategori" required class="w-full bg-black border border-white/10 rounded-xl text-[11px] font-bold text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all appearance-none">
+                                <option value="Fiksi" {{ $buku->kategori == 'Fiksi' ? 'selected' : '' }} class="bg-black text-white">Fiksi</option>
+                                <option value="Non-Fiksi" {{ $buku->kategori == 'Non-Fiksi' ? 'selected' : '' }} class="bg-black text-white">Non-Fiksi</option>
+                                <option value="Pelajaran" {{ $buku->kategori == 'Pelajaran' ? 'selected' : '' }} class="bg-black text-white">Pelajaran</option>
+                                <option value="Komik" {{ $buku->kategori == 'Komik' ? 'selected' : '' }} class="bg-black text-white">Komik</option>
+                                <option value="Novel" {{ $buku->kategori == 'Novel' ? 'selected' : '' }} class="bg-black text-white">Novel</option>
+                                <option value="Lainnya" {{ $buku->kategori == 'Lainnya' ? 'selected' : '' }} class="bg-black text-white">Lainnya</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div>

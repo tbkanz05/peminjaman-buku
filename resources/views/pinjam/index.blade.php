@@ -7,10 +7,10 @@
 
     <!-- ROOT -->
     <div class="py-12 animate-fade-in" x-data="{ search: '' }">
-        <div class="catalog-container sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <!-- HEADER + SEARCH -->
-            <div class="mb-10 flex flex-col md:flex-row justify-between items-end gap-6 pb-4 border-b border-white/5">
+            <div class="mb-10 flex flex-col md:flex-row justify-between items-center md:items-end gap-6 pb-4 border-b border-white/5">
                 <div>
                     <h2 class="text-3xl font-black text-gray-900 dark:text-white uppercase tracking-tighter italic">
                         Katalog Buku
@@ -38,7 +38,10 @@
             <div class="book-grid">
                 @forelse($buku as $b)
                     <template
-                        x-if="!search || {{ json_encode(strtolower($b->judul)) }}.includes(search.toLowerCase()) || {{ json_encode(strtolower($b->pengarang)) }}.includes(search.toLowerCase())">
+                        x-if="!search 
+                        || {{ json_encode(strtolower($b->judul)) }}.includes(search.toLowerCase()) 
+                        || {{ json_encode(strtolower($b->pengarang)) }}.includes(search.toLowerCase())
+                        || {{ json_encode(strtolower($b->kategori)) }}.includes(search.toLowerCase())">
 
                         <div class="book-card-custom group" x-data="{ showBorrowForm: false }">
 
@@ -110,10 +113,15 @@
                             <div class="book-info-box">
                                 <div class="mb-4">
                                     <div class="flex justify-between items-start gap-2 mb-1">
-                                        <h3
-                                            class="text-sm font-bold text-gray-900 dark:text-white line-clamp-2 leading-tight">
-                                            {{ $b->judul }}
-                                        </h3>
+                                        <div class="flex flex-col">
+                                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[7px] font-black bg-indigo-500/20 text-indigo-400 uppercase tracking-widest mb-1 w-fit border border-indigo-500/20">
+                                                {{ $b->kategori ?? 'UMUM' }}
+                                            </span>
+                                            <h3
+                                                class="text-sm font-bold text-gray-900 dark:text-white line-clamp-2 leading-tight">
+                                                {{ $b->judul }}
+                                            </h3>
+                                        </div>
                                         <span class="flex-shrink-0 text-[10px] font-medium text-white/90">
                                             STOK: {{ $b->stok }}
                                         </span>

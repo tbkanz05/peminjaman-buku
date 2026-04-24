@@ -1,10 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Kelola Data Siswa') }}
             </h2>
-            <a href="{{ route('admin.siswa.create') }}" class="btn-glow-indigo inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-xl font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 transition-all duration-300">
+            <a href="{{ route('admin.siswa.create') }}" class="btn-glow-indigo w-full sm:w-auto inline-flex items-center justify-center px-6 py-2.5 bg-indigo-600 border border-transparent rounded-xl font-bold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 transition-all duration-300">
                 Tambah Siswa
             </a>
         </div>
